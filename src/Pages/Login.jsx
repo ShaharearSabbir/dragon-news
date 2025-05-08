@@ -1,20 +1,26 @@
-import React, { use } from "react";
-import { Link } from "react-router";
+import React, { use, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const Login = () => {
   const { logIn, setUser } = use(AuthContext);
+  const [error, setError] = useState("");
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setError("");
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     logIn(email, password)
       .then((result) => {
         setUser(result.user);
+        navigate(location.state ? location.state : "/");
       })
-      .catch((error) => console.error(error));
+      .catch((error) => setError(error.code));
   };
 
   return (
@@ -32,6 +38,7 @@ const Login = () => {
               name="email"
               className="input w-full"
               placeholder="Email"
+              required
             />
             <label className="label">Password</label>
             <input
@@ -39,7 +46,9 @@ const Login = () => {
               type="password"
               className="input w-full"
               placeholder="Password"
+              required
             />
+            {error && <p className="text-red-500">{error}</p>}
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
@@ -49,7 +58,11 @@ const Login = () => {
           </form>
           <p className="my-6 text-center font-semibold">
             Don't Have An Account ?{" "}
-            <Link className="text-secondary" to="/auth/register">
+            <Link
+              className="text-secondary"
+              state={location.state}
+              to="/auth/register"
+            >
               Register
             </Link>
           </p>

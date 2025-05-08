@@ -2,9 +2,11 @@ import React from "react";
 import { FiEye } from "react-icons/fi";
 import { FaBookmark, FaShareAlt, FaStar } from "react-icons/fa";
 import { format } from "date-fns";
+import { Link } from "react-router";
 
 const NewsCard = ({ news }) => {
   const {
+    id,
     title,
     rating: { number: ratingNumber },
     total_view,
@@ -54,7 +56,6 @@ const NewsCard = ({ news }) => {
             <>
               {details.slice(0, 200)}
               {"... "}
-              {console.log(true)}
               <span className="cursor-pointer hover:text-amber-500 font-semibold">
                 Read More
               </span>
@@ -81,9 +82,13 @@ const NewsCard = ({ news }) => {
           </div>
         </div>
         <div className="mt-4">
-          <a className="text-blue-500 hover:underline text-sm" href="#">
+          <Link
+            to={`/newsDetails/${id}`}
+            className="text-blue-500 hover:underline text-sm"
+            href="#"
+          >
             Read More
-          </a>
+          </Link>
         </div>
       </div>
     </div>
